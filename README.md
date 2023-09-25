@@ -11,11 +11,19 @@ This project uses machine learning methods, experimental electrocatalysis data a
 
 ### Installation
 You can use the pip package manager to install dependencies:
+```bash
 pip install -r requirements.txt
+```
 
 ### Notebooks
 The notebook folder contains Jupyter notebooks for training and predict models.
 
 ### Models Evaluation
-The GradientBoostingRegressor model has the best result
+The GradientBoostingRegressor model has the best result.
 ![Alt Text](reports/GRB_regression_plot.svg)
+
+### Acknowledgment
+We would like to acknowledge [Infochemistry Scientific Center ISC](infochemistry.ru) and [Sergey Semenov Lab](https://www.weizmann.ac.il/Organic_Chemistry/Semenov/) for their contributions to this project.
+
+### License
+The code is distributed under the MIT license.
