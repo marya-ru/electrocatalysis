@@ -16,14 +16,16 @@ pip install -r requirements.txt
 ```
 
 ### Notebooks
-The notebook folder contains Jupyter notebooks for training and predict models.
+The `notebook` folder contains Jupyter notebooks for training and predict models.
 
 ### Models Evaluation
-The GradientBoostingRegressor model has the best result.
+The evaluation results of models are presented in `report` folder. The GradientBoostingRegressor model has the best result.
 ![Alt Text](reports/GRB_regression_plot.svg)
+Feature Importance calculate a score for all the input features for a given model. A higher score means that the specific feature will have a larger effect on the model.
+![Alt Text](reports/GRB_feature_importances.svg)
 
 ### Acknowledgment
 We would like to acknowledge [Infochemistry Scientific Center ISC](infochemistry.ru) and [Sergey Semenov Lab](https://www.weizmann.ac.il/Organic_Chemistry/Semenov/) for their contributions to this project.
 
-### License
+### LICENSE
 The code is distributed under the MIT license.
