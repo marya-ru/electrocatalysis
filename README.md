@@ -25,7 +25,7 @@ The evaluation results of models are presented in `report` folder. The GradientB
 </p>
 Feature Importance calculate a score for all the input features for a given model. A higher score means that the specific feature will have a larger effect on the model.
 <p align="center">
-  <img width="900" height="600" src="reports/GRB_feature_importances.svg">
+  <img width="800" height="400" src="reports/GRB_feature_importances.svg">
 </p>
 
 ### Acknowledgment
