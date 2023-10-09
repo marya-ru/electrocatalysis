@@ -21,7 +21,7 @@ The `notebook` folder contains Jupyter notebooks for training and predict models
 ### Models Evaluation
 The evaluation results of models are presented in `report` folder. The GradientBoostingRegressor model has the best result.
 <p align="center">
-  <img width="800" height="500" src="reports/GRB_regression_plot.svg">
+  <img width="800" height="400" src="reports/GRB_regression_plot.svg">
 </p>
 Feature Importance calculate a score for all the input features for a given model. A higher score means that the specific feature will have a larger effect on the model.
 <p align="center">
