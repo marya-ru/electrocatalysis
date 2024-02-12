@@ -25,9 +25,6 @@ repos:
       - id: check-ast
         # check yaml files
       - id: check-yaml
-        # checks names python tests
-      - id: name-tests-test
-        args: ['--pytest-test-first']
         # fix requirements
       - id: requirements-txt-fixer
   - repo: 'https://github.com/PyCQA/flake8'
@@ -40,11 +37,3 @@ repos:
     rev: 23.11.0
     hooks:
       - id: black
-#  - repo: local
-#    hooks:
-#      - id: custom
-#        name: custom
-#        entry: make
-#        args: ['tests']
-#        language: system
-#        pass_filenames: false
