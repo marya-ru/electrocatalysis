@@ -1,5 +1,14 @@
 # Electrochemical reaction yield prediction
 
+![GitHub](https://img.shields.io/github/license/marya-ru/electrocatalysis)
+![GitHub last commit](https://img.shields.io/github/last-commit/marya-ru/electrocatalysis)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/marya-ru/electrocatalysis)
+![contributors](https://img.shields.io/github/contributors/marya-ru/electrocatalysis) 
+![codesize](https://img.shields.io/github/languages/code-size/marya-ru/electrocatalysis)
+![GitHub repo size](https://img.shields.io/github/repo-size/marya-ru/electrocatalysis)
+![GitHub top language](https://img.shields.io/github/languages/top/marya-ru/electrocatalysis)
+![GitHub language count](https://img.shields.io/github/languages/count/marya-ru/electrocatalysis)
+
 ### Introduction
 
 Electrochemical reaction yield depends on many parameters: the substrates nature, the catalyst, temperature, parameters and current type. It is difficult to assess how these parameters together will affect the reaction yield.
