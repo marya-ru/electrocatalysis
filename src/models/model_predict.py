@@ -3,17 +3,28 @@ import pandas as pd
 from src.data.datasets import load_dataset, load_calc_data
 
 
-def objective(trial, reagent_1: str, reagent_2: str, model):
+def objective(trial, reagent_1: str, reagent_2: str, model, new_input: list = None):
     """
     Create optimization objective to select best params for NMR Yield increase
     :param trial: Optuna object
     :param reagent_1: First selected reagent(str)
     :param reagent_2: Second selected reagent(str)
     :param model: Scikit-learn fitted model
+    :param new_input: List with homo, lumo, mu for reagent 1 and reagent 2
     :return:
     """
     data = load_dataset()
     calc_data = load_calc_data()
+
+    if new_input is None:
+        homo_r1 = [calc_data['R1']['HOMO_R1'].loc[calc_data['R1']['Reagent 1'] == reagent_1].values[0]]
+        lumo_r1 = [calc_data['R1']['LUMO_R1'].loc[calc_data['R1']['Reagent 1'] == reagent_1].values[0]]
+        mu_r1 = [calc_data['R1']['MU_R1'].loc[calc_data['R1']['Reagent 1'] == reagent_1].values[0]]
+        homo_r2 = [calc_data['R2']['HOMO_R2'].loc[calc_data['R2']['Reagent 2'] == reagent_2].values[0]]
+        lumo_r2 = [calc_data['R2']['LUMO_R2'].loc[calc_data['R2']['Reagent 2'] == reagent_2].values[0]]
+        mu_r2 = [calc_data['R2']['MU_R2'].loc[calc_data['R2']['Reagent 2'] == reagent_2].values[0]]
+    else:
+        homo_r1, lumo_r1, mu_r1, homo_r2, lumo_r2, mu_r2 = new_input
 
     amount_ligand = trial.suggest_categorical('Amount of ligand (mol %)', np.unique(data['Amount of ligand (mol %)']).tolist())
     amount_base = trial.suggest_categorical('Amount of base (eq.)', np.unique(data['Amount of base (eq.)']).tolist())
@@ -33,12 +44,12 @@ def objective(trial, reagent_1: str, reagent_2: str, model):
         'Temperature(C)': [temperature],
         'Time (h)': [reaction_time],
         'Current type': [current_type],
-        'HOMO_R1': [calc_data['R1']['HOMO_R1'].loc[calc_data['R1']['Reagent 1'] == reagent_1].values[0]],
-        'LUMO_R1': [calc_data['R1']['LUMO_R1'].loc[calc_data['R1']['Reagent 1'] == reagent_1].values[0]],
-        'MU_R1': [calc_data['R1']['MU_R1'].loc[calc_data['R1']['Reagent 1'] == reagent_1].values[0]],
-        'HOMO_R2': [calc_data['R2']['HOMO_R2'].loc[calc_data['R2']['Reagent 2'] == reagent_2].values[0]],
-        'LUMO_R2': [calc_data['R2']['LUMO_R2'].loc[calc_data['R2']['Reagent 2'] == reagent_2].values[0]],
-        'MU_R2': [calc_data['R2']['MU_R2'].loc[calc_data['R2']['Reagent 2'] == reagent_2].values[0]],
+        'HOMO_R1': homo_r1,
+        'LUMO_R1': lumo_r1,
+        'MU_R1': mu_r1,
+        'HOMO_R2': homo_r2,
+        'LUMO_R2': lumo_r2,
+        'MU_R2': mu_r2,
         'HOMO_SOLV': [calc_data['SOLVENT']['HOMO_SOLV'].loc[calc_data['SOLVENT']['Solvent'] == solv].values[0]],
         'LUMO_SOLV': [calc_data['SOLVENT']['LUMO_SOLV'].loc[calc_data['SOLVENT']['Solvent'] == solv].values[0]],
         'MU_SOLV': [calc_data['SOLVENT']['MU_SOLV'].loc[calc_data['SOLVENT']['Solvent'] == solv].values[0]],

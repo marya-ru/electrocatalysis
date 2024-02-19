@@ -1,5 +1,4 @@
 import joblib
-from src.utils import PATH_TO_MODELS
 
 
 def load_model(path: str):

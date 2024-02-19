@@ -1,6 +1,5 @@
 import optuna
 import numpy as np
-import pandas as pd
 import streamlit as st
 from src.models.load_models import load_model
 from src.models.model_predict import objective
@@ -11,6 +10,10 @@ from src.utils import check_password, MODELS, PATH_TO_PROCESSED_DATA, check_tabl
 if not check_password():
     st.stop()
 
+st.set_page_config(
+    layout='wide',
+    initial_sidebar_state='expanded'
+)
 
 optuna.logging.set_verbosity(optuna.logging.WARNING)
 
@@ -66,67 +69,122 @@ st.markdown(
     """
 )
 
-col1_input, col2_input = st.columns(2)
+new_params = st.checkbox('Set new DFT params')
+new_input = None
 
-with col1_input:
-    reagent1 = st.selectbox(
-        'Select Reagent 1',
-        np.unique(exp_data['Reagent 1'].values)
-    )
+if not new_params:
+    new_input = None
+    col1_input, col2_input = st.columns(2)
 
-with col2_input:
-    reagent2 = st.selectbox(
-        'Select Reagent 2',
-        np.unique(exp_data['Reagent 2'].values)
-    )
+    with col1_input:
+        reagent1 = st.selectbox(
+            'Select Reagent 1',
+            np.unique(exp_data['Reagent 1'].values)
+        )
 
-st.markdown(
-    """
-    ##### DFT params of selected components
-    """
-)
+    with col2_input:
+        reagent2 = st.selectbox(
+            'Select Reagent 2',
+            np.unique(exp_data['Reagent 2'].values)
+        )
 
-col_reagent1, col_reagent2 = st.columns(2)
-
-with col_reagent1:
-    st.write(f"{reagent1}")
-    st.write(
-        f"""
-        Energy HOMO = `{calc_data['R1']['HOMO_R1'].loc[calc_data['R1']['Reagent 1'] == reagent1].values[0]}`
+    st.markdown(
+        """
+        ##### DFT params of selected components
         """
     )
 
-    st.write(
-        f"""
-        Energy LUMO = `{calc_data['R1']['LUMO_R1'].loc[calc_data['R1']['Reagent 1'] == reagent1].values[0]}`
-        """
-    )
+    col_reagent1, col_reagent2 = st.columns(2)
 
-    st.write(
-        f"""
-        Dipole moment = `{calc_data['R1']['MU_R1'].loc[calc_data['R1']['Reagent 1'] == reagent1].values[0]}`
-        """
-    )
+    with col_reagent1:
+        st.write(f"{reagent1}")
+        st.write(
+            f"""
+            Energy HOMO = `{calc_data['R1']['HOMO_R1'].loc[calc_data['R1']['Reagent 1'] == reagent1].values[0]}`
+            """
+        )
 
-with col_reagent2:
-    st.write(f"{reagent2}")
-    st.write(
-        f"""
-        Energy HOMO = `{calc_data['R2']['HOMO_R2'].loc[calc_data['R2']['Reagent 2'] == reagent2].values[0]}`
-        """
-    )
+        st.write(
+            f"""
+            Energy LUMO = `{calc_data['R1']['LUMO_R1'].loc[calc_data['R1']['Reagent 1'] == reagent1].values[0]}`
+            """
+        )
 
-    st.write(
-        f"""
-        Energy LUMO = `{calc_data['R2']['LUMO_R2'].loc[calc_data['R2']['Reagent 2'] == reagent2].values[0]}`
-        """
-    )
+        st.write(
+            f"""
+            Dipole moment = `{calc_data['R1']['MU_R1'].loc[calc_data['R1']['Reagent 1'] == reagent1].values[0]}`
+            """
+        )
 
-    st.write(
-        f"""
-        Dipole moment = `{calc_data['R2']['MU_R2'].loc[calc_data['R2']['Reagent 2'] == reagent2].values[0]}`
-        """
-    )
+    with col_reagent2:
+        st.write(f"{reagent2}")
+        st.write(
+            f"""
+            Energy HOMO = `{calc_data['R2']['HOMO_R2'].loc[calc_data['R2']['Reagent 2'] == reagent2].values[0]}`
+            """
+        )
+
+        st.write(
+            f"""
+            Energy LUMO = `{calc_data['R2']['LUMO_R2'].loc[calc_data['R2']['Reagent 2'] == reagent2].values[0]}`
+            """
+        )
+
+        st.write(
+            f"""
+            Dipole moment = `{calc_data['R2']['MU_R2'].loc[calc_data['R2']['Reagent 2'] == reagent2].values[0]}`
+            """
+        )
+
+else:
+    col1, col2 = st.columns(2)
+
+    with col1:
+        homo_r1 = st.number_input('Insert energy HOMO for reagent 1',
+                                  value=0.0,
+                                  max_value=100.0,
+                                  min_value=-100.0,
+                                  step=0.0001)
+
+        lumo_r1 = st.number_input('Insert energy LUMO for reagent 1',
+                                  value=0.0,
+                                  max_value=100.0,
+                                  min_value=-100.0,
+                                  step=0.0001)
+
+        mu_r1 = st.number_input('Insert dipole moment for reagent 1',
+                                  value=0.0,
+                                  max_value=100.0,
+                                  min_value=-100.0,
+                                  step=0.0001)
+
+    with col2:
+        homo_r2 = st.number_input('Insert energy HOMO for reagent 2',
+                                  value=0.0,
+                                  max_value=100.0,
+                                  min_value=-100.0,
+                                  step=0.0001)
+
+        lumo_r2 = st.number_input('Insert energy LUMO for reagent 2',
+                                  value=0.0,
+                                  max_value=100.0,
+                                  min_value=-100.0,
+                                  step=0.0001)
+
+        mu_r2 = st.number_input('Insert dipole moment for reagent 2',
+                                  value=0.0,
+                                  max_value=100.0,
+                                  min_value=-100.0,
+                                  step=0.0001)
+
+    if homo_r1 == 0.0 and lumo_r1 == 0.0 and mu_r1 == 0.0:
+        st.warning("Please insert params for reagent 1")
+    elif homo_r2 == 0.0 and lumo_r2 == 0.0 and mu_r2 == 0.0:
+        st.warning("Please insert params for reagent 2")
+    else:
+        new_input = [homo_r1, lumo_r1, mu_r1, homo_r2, lumo_r2, mu_r2]
+        reagent1 = None
+        reagent2 = None
 
 st.markdown("""
 ### Prediction parameters
@@ -143,7 +201,7 @@ if st.button('Predict NMR yield(%)'):
     study = optuna.create_study(direction='maximize')
 
     with st.spinner('Optimizing parameters...'):
-        study.optimize(lambda trial: objective(trial, reagent1, reagent2, model), n_trials=number_of_trials)
+        study.optimize(lambda trial: objective(trial, reagent1, reagent2, model, new_input), n_trials=number_of_trials)
     st.success('Done!')
 
     result_data = study.best_params
