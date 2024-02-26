@@ -3,7 +3,7 @@ import pandas as pd
 from src.data.datasets import load_dataset, load_calc_data
 
 
-def objective(trial, reagent_1: str, reagent_2: str, model, new_input: list = None):
+def objective(trial, reagent_1: str, reagent_2: str, model, new_input: list = None, reaction_type: str = "Amination"):
     """
     Create optimization objective to select best params for NMR Yield increase
     :param trial: Optuna object
@@ -33,8 +33,16 @@ def objective(trial, reagent_1: str, reagent_2: str, model, new_input: list = No
     reaction_time = trial.suggest_categorical('Time (h)', np.unique(data['Time (h)']).tolist())
     current_type = trial.suggest_categorical('Current type', np.unique(data['Current type']).tolist())
     solv = trial.suggest_categorical('solvent', np.unique(calc_data['SOLVENT']['Solvent']).tolist())
-    base = trial.suggest_categorical('base', np.unique(calc_data['BASE']['Base']).tolist())
-    ligand = trial.suggest_categorical('ligand', np.unique(calc_data['LIGAND']['Ligand']).tolist())
+    if reaction_type == "Amination":
+        base = trial.suggest_categorical('base', ['-'])
+    else:
+        base_iter = np.unique(calc_data['BASE']['Base']).tolist()
+        base_iter.remove('-')
+        base = trial.suggest_categorical('base', base_iter)
+
+    ligand_iter = np.unique(calc_data['LIGAND']['Ligand']).tolist()
+    ligand_iter.remove('-')
+    ligand = trial.suggest_categorical('ligand', ligand_iter)
     electrolyte = trial.suggest_categorical('electrolyte', np.unique(calc_data['ELECTROLYTE']['Electrolyte']).tolist())
 
     input_data = pd.DataFrame(data={

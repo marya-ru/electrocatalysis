@@ -69,6 +69,14 @@ st.markdown(
     """
 )
 
+reaction_type = st.selectbox(
+    "Select reaction type",
+    ["Amination",
+     "Etherification",
+     "Esterification"],
+    index=0
+)
+
 new_params = st.checkbox('Set new DFT params')
 new_input = None
 
@@ -201,7 +209,7 @@ if st.button('Predict NMR yield(%)'):
     study = optuna.create_study(direction='maximize')
 
     with st.spinner('Optimizing parameters...'):
-        study.optimize(lambda trial: objective(trial, reagent1, reagent2, model, new_input), n_trials=number_of_trials)
+        study.optimize(lambda trial: objective(trial, reagent1, reagent2, model, new_input, reaction_type=reaction_type), n_trials=number_of_trials)
     st.success('Done!')
 
     result_data = study.best_params
