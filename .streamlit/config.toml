@@ -1,0 +1,7 @@
+[server]
+port=8513
+enableCORS=false
+enableXsrfProtection=false
+
+[browser]
+gatherUsageStats=false

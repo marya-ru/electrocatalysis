@@ -1,0 +1,11 @@
+[[pages]]
+path = 'app/welcome.py'
+name = 'Welcome!'
+
+[[pages]]
+path = 'app/data.py'
+name = 'Dataset'
+
+[[pages]]
+path = 'app/predict.py'
+name = 'Use model'
