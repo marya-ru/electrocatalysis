@@ -7,8 +7,8 @@ from src.data.datasets import load_dataset, load_raw_data, load_calc_data
 from src.utils import check_password, MODELS, PATH_TO_PROCESSED_DATA, check_table
 
 
-if not check_password():
-    st.stop()
+#if not check_password():
+    #st.stop()
 
 st.set_page_config(
     layout='wide',

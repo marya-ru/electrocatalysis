@@ -26,24 +26,31 @@ def objective(trial, reagent_1: str, reagent_2: str, model, new_input: list = No
     else:
         homo_r1, lumo_r1, mu_r1, homo_r2, lumo_r2, mu_r2 = new_input
 
+    ligand_iter = np.unique(calc_data['LIGAND']['Ligand']).tolist()
+    ligand_iter.remove('-')
+    ligand = trial.suggest_categorical('Ligand', ligand_iter)
     amount_ligand = trial.suggest_categorical('Amount of ligand (mol %)', np.unique(data['Amount of ligand (mol %)']).tolist())
-    amount_base = trial.suggest_categorical('Amount of base (eq.)', np.unique(data['Amount of base (eq.)']).tolist())
+    if reaction_type == "Amination":
+        base = trial.suggest_categorical('Base', ['-'])
+    else:
+        base_iter = np.unique(calc_data['BASE']['Base']).tolist()
+        base_iter.remove('-')
+        base = trial.suggest_categorical('Base', base_iter)
+
+    if reaction_type == "Amination":
+        amount_base = trial.suggest_categorical('Amount of base (eq.)', [0.0])
+    else:
+        amount_base_iter = np.unique(data['Amount of base (eq.)']).tolist()
+        amount_base_iter.remove(0.0)
+        amount_base = trial.suggest_categorical('Amount of base (eq.)', amount_base_iter)
+
+    solv = trial.suggest_categorical('Solvent', np.unique(calc_data['SOLVENT']['Solvent']).tolist())
+    electrolyte = trial.suggest_categorical('Electrolyte', np.unique(calc_data['ELECTROLYTE']['Electrolyte']).tolist())
     frequency = trial.suggest_categorical('Frequency (Hz)', np.unique(data['Frequency (Hz)']).tolist())
     temperature = trial.suggest_categorical('Temperature(C)', np.unique(data['Temperature(C)']).tolist())
     reaction_time = trial.suggest_categorical('Time (h)', np.unique(data['Time (h)']).tolist())
     current_type = trial.suggest_categorical('Current type', np.unique(data['Current type']).tolist())
-    solv = trial.suggest_categorical('solvent', np.unique(calc_data['SOLVENT']['Solvent']).tolist())
-    if reaction_type == "Amination":
-        base = trial.suggest_categorical('base', ['-'])
-    else:
-        base_iter = np.unique(calc_data['BASE']['Base']).tolist()
-        base_iter.remove('-')
-        base = trial.suggest_categorical('base', base_iter)
 
-    ligand_iter = np.unique(calc_data['LIGAND']['Ligand']).tolist()
-    ligand_iter.remove('-')
-    ligand = trial.suggest_categorical('ligand', ligand_iter)
-    electrolyte = trial.suggest_categorical('electrolyte', np.unique(calc_data['ELECTROLYTE']['Electrolyte']).tolist())
 
     input_data = pd.DataFrame(data={
         'Amount of ligand (mol %)': [amount_ligand],
