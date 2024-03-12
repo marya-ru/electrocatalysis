@@ -1,14 +1,15 @@
 import optuna
 import numpy as np
 import streamlit as st
+import pandas as pd
 from src.models.load_models import load_model
 from src.models.model_predict import objective
 from src.data.datasets import load_dataset, load_raw_data, load_calc_data
 from src.utils import check_password, MODELS, PATH_TO_PROCESSED_DATA, check_table
 
 
-#if not check_password():
-    #st.stop()
+if not check_password():
+    st.stop()
 
 st.set_page_config(
     layout='wide',
@@ -148,6 +149,9 @@ else:
     col1, col2 = st.columns(2)
 
     with col1:
+
+        reagent1 = st.text_input("Insert reagent 1 name")
+
         homo_r1 = st.number_input('Insert energy HOMO for reagent 1',
                                   value=0.0,
                                   max_value=100.0,
@@ -167,6 +171,8 @@ else:
                                   step=0.0001)
 
     with col2:
+        reagent2 = st.text_input("Insert reagent 2 name")
+
         homo_r2 = st.number_input('Insert energy HOMO for reagent 2',
                                   value=0.0,
                                   max_value=100.0,
@@ -191,8 +197,8 @@ else:
         st.warning("Please insert params for reagent 2")
     else:
         new_input = [homo_r1, lumo_r1, mu_r1, homo_r2, lumo_r2, mu_r2]
-        reagent1 = None
-        reagent2 = None
+        # reagent1 = None
+        # reagent2 = None
 
 st.markdown("""
 ### Prediction parameters
@@ -216,5 +222,8 @@ if st.button('Predict NMR yield(%)'):
     result_data['NMR Yield (%)'] = round(study.best_trial.value, 2)
 
     result = check_table(result_data)
+
+    reagents = pd.DataFrame([[reagent1], [reagent2]], columns=['Values'], index=['Reagent 1', 'Reagent 2'])
+    result = pd.concat([reagents, result], ignore_index=False)
 
     st.table(result)
